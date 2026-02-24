@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 2nd Monthsary! ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- RESET & BODY --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #fbc2eb 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- CONTAINER (Ensures Perfect Centering) --- */
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- ENVELOPE --- */
+        .envelope-wrapper {
+            cursor: pointer;
+            position: absolute;
+            z-index: 50;
+            transition: transform 0.3s ease;
+            /* Center positioning technique */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .envelope-wrapper:hover {
+            transform: translate(-50%, -50%) scale(1.05); /* Maintain center while scaling */
+        }
+
+        .envelope {
+            width: 300px;
+            height: 200px;
+            background: #ff5e6c;
+            position: relative;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 110px solid #ff8fa3;
+            transform-origin: top;
+        }
+
+        .heart-seal {
+            position: absolute;
+            top: 40px;
+            z-index: 60;
+            font-size: 3rem;
+            color: white;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+            animation: heartbeat 1.5s infinite;
+        }
+
+        .tap-text {
+            position: absolute;
+            bottom: -50px;
+            width: 300px; /* Match envelope width */
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.2rem;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        /* --- CARD --- */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            width: 90%;
+            max-width: 400px;
+            min-height: 500px;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+            /* Hidden State */
+            opacity: 0;
+            z-index: 10;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .card.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .card h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #ff5e6c;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        .message-area {
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+            text-align: left;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto; /* Scroll if text is very long */
+        }
+
+        /* --- TULIPS --- */
+        .bouquet {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin-top: auto;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1.5s ease;
+            flex-shrink: 0;
+        }
+
+        .bouquet.bloom {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .paper {
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            border-left: 30px solid transparent; border-right: 30px solid transparent; border-top: 80px solid #f3d2c1;
+            z-index: 2;
+        }
+
+        .tulip {
+            position: absolute; width: 20px; height: 30px; background: #ff69b4; border-radius: 0 0 10px 10px; z-index: 1;
+        }
+        .tulip::before, .tulip::after {
+            content: ''; position: absolute; top: -10px; width: 10px; height: 18px; background: #ff69b4; border-radius: 10px 10px 0 0;
+        }
+        .tulip::before { left: 0; transform: rotate(-15deg); }
+        .tulip::after { right: 0; transform: rotate(15deg); }
+        
+        .stem { position: absolute; width: 3px; height: 50px; background: #6ab04c; bottom: -45px; left: 8px; z-index: -1; }
+        
+        .t1 { left: 50%; top: -10px; transform: translateX(-50%); z-index: 3; }
+        .t2 { left: 20px; top: 10px; transform: rotate(-20deg); z-index: 2; }
+        .t3 { right: 20px; top: 10px; transform: rotate(20deg); z-index: 2; }
+        
+        .ribbon {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); width: 15px; height: 15px; background: #e74c3c; border-radius: 50%; z-index: 5;
+        }
+
+        .hidden { display: none !important; }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        #confetti { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99; }
+    </style>
+</head>
+<body>
+
+    <canvas id="confetti"></canvas>
+
+    <!-- 🎵 MUSIC (Autoplay Enabled) -->
+    <!-- Important: Modern browsers block autoplay. The script below forces it on first click. -->
+    <audio id="bgMusic" loop autoplay>
+        <source src="The 1975 - About You (Official).mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        
+        <!-- ENVELOPE -->
+        <div class="envelope-wrapper" id="envelope" onclick="openSurprise()">
+            <div class="envelope">
+                <div class="heart-seal">❤️</div>
+            </div>
+            <div class="tap-text">Tap to Open</div>
+        </div>
+
+        <!-- CARD -->
+        <div class="card" id="card">
+            <h1>Happy 2nd Monthsary!</h1>
+            <p class="message-area" id="text"></p>
+            
+            <!-- TULIPS -->
+            <div class="bouquet" id="flowers">
+                <div class="tulip t1"><div class="stem"></div></div>
+                <div class="tulip t2"><div class="stem"></div></div>
+                <div class="tulip t3"><div class="stem"></div></div>
+                <div class="paper"></div>
+                <div class="ribbon"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- MUSIC LOGIC (Auto-Start) ---
+        // This tries to play music immediately. If blocked, it waits for the first tap anywhere.
+        window.addEventListener('load', () => {
+            const audio = document.getElementById('bgMusic');
+            audio.volume = 0.5;
+
+            // Try to play automatically
+            const playPromise = audio.play();
+
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Autoplay prevented. Waiting for interaction.");
+                    // Add listener to play on FIRST click anywhere on the screen
+                    document.body.addEventListener('click', () => {
+                        audio.play();
+                    }, { once: true });
+                });
+            }
+        });
+
+        // --- MESSAGE ---
+        const message = "Happy 2nd Monthsary to us babi! ❤️\n\nThankyou for choosing me everyday, staying with me, understanding me, my safe place and my happiness. \n\nSobrang swerte ko sayo kase palagi kang nanjan para sakin tuwing kailangan ko ng masasandalan. Naa-appreciate ko lht ng efforts mo po sobra. \n\nMagkaroon man tayo ng problema o hnd pagkakaintindihan ay piliin pa rin natin mag stay sa isa’t isa po, promise na mag sstay ako sayo babi hnd kita iiwan po. \n\nMore months and years to come with us babi. Mahal na mahal kita babi 🫶";
+
+        // --- ANIMATION LOGIC ---
+        function openSurprise() {
+            const env = document.getElementById('envelope');
+            const card = document.getElementById('card');
+            
+            // Note: Music is handled by the window load/body click script above
+            
+            // Hide Envelope
+            env.style.transition = "opacity 0.5s ease";
+            env.style.opacity = "0";
+            
+            setTimeout(() => {
+                env.classList.add('hidden');
+                card.classList.add('active');
+                startConfetti();
+                setTimeout(typeWriter, 800);
+            }, 500);
+        }
+
+        // Typewriter
+        let i = 0;
+        const speed = 40;
+        const txtArea = document.getElementById('text');
+        const flowers = document.getElementById('flowers');
+
+        function typeWriter() {
+            if (i < message.length) {
+                txtArea.innerHTML += message.charAt(i) === '\n' ? '<br>' : message.charAt(i);
+                i++;
+                // Auto-scroll
+                const card = document.querySelector('.card');
+                if(card.scrollHeight > card.clientHeight) {
+                     card.scrollTop = card.scrollHeight;
+                }
+                setTimeout(typeWriter, speed);
+            } else {
+                flowers.classList.add('bloom');
+            }
+        }
+
+        // Confetti
+        const canvas = document.getElementById("confetti");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        function createParticle() {
+            return {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                size: Math.random() * 8 + 3,
+                color: `hsl(${Math.random() * 60 + 330}, 100%, 70%)`,
+                speedY: Math.random() * 3 + 2,
+                speedX: Math.random() * 2 - 1
+            };
+        }
+
+        function startConfetti() {
+            for(let k=0; k<100; k++) particles.push(createParticle());
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                p.y += p.speedY;
+                p.x += p.speedX;
+                if(p.y > canvas.height) particles[index] = createParticle();
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animateConfetti);
+        }
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
